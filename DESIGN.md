@@ -1,61 +1,42 @@
-# DESIGN.md
+# Design Documentation
 
-## UI/UX Design System
-This document outlines the UI/UX design system for the Lifeflow application, focusing on consistency, usability, and accessibility across all modules.
+## Overview
+This document outlines the comprehensive UI/UX wireframes and design system for the Lifeflow application, covering all modules.
 
-## Wireframes for Modules
-### 1. Dashboard
-- Overview of key metrics and user engagement features.
+## Design System
 
-### 2. Calendar
-- Layout for scheduling and events management.
+### Colors
+- **Primary Color:** #376B98
+- **Secondary Color:** #FF6B6B
+- **Accent Color:** #FFC300
 
-### 3. Tasks
-- To-do list interface with organization features.
+### Typography
+- **Heading Font:** Open Sans Bold
+- **Body Font:** Open Sans Regular
+- **Font Sizes:**
+  - H1: 32px
+  - H2: 24px
+  - Body: 16px
 
-### 4. Meals
-- Meal planner interface with nutritional information.
+### Components
 
-### 5. Finance
-- Budgeting and tracking interface.
+#### Buttons
+- **Primary Button:** Rounded corners, blue background, white text.
+- **Secondary Button:** Outline style with a hover effect.
 
-### 6. AI Chat
-- Chat interface for user interaction with the AI Assistant.
+#### Forms
+- **Input Fields:** Rounded corners, standard size, placeholder text.
 
-### 7. Login
-- User authentication interface with options for recovery.
+## Wireframes
 
-## Color Palette
-- **Primary Color:** #4A90E2  
-- **Secondary Color:** #50E3C2  
-- **Accent Color:** #FFCC00  
-- **Background Color:** #F4F4F4  
+### Module 1: User Authentication
+![User Authentication Wireframe](link_to_wireframe_image)
 
-## Typography
-- **Font Family:** 
-  - Primary: `Helvetica Neue`, sans-serif  
-  - Secondary: `Arial`, sans-serif  
-- **Headings:**  
-  - H1: 24px, Bold  
-  - H2: 20px, Bold  
-  - H3: 18px, Semi-Bold  
-- **Body Text:**  
-  - Regular: 14px, Normal  
-  - Small: 12px, Normal  
+### Module 2: Dashboard
+![Dashboard Wireframe](link_to_wireframe_image)
 
-## Spacing System
-- **Standard Margin:** 16px  
-- **Standard Padding:** 16px  
-- **Component Spacing:** 8px to 24px (based on hierarchy)  
+### Module 3: Settings
+![Settings Wireframe](link_to_wireframe_image)
 
-## Responsive Design Breakpoints
-- **Mobile:** 320px to 480px  
-- **Tablet:** 481px to 768px  
-- **Desktop:** 769px to 1200px  
-- **Large Screens:** 1201px and above  
-
-## Accessibility Guidelines
-- Use of alt text for images.  
-- Ensure color contrast ratios meet WCAG AA standard.  
-- Keyboard navigation support for all interactive elements.  
-- Clear and consistent layouts for screen readers.
+## Conclusion
+This document serves as a guideline for the design and development phase, ensuring that all team members adhere to the established design system and wireframes.
