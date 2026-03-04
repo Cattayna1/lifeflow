@@ -1,0 +1,410 @@
+{
+  "documentType": "Design System Specification",
+  "version": "1.0.0",
+  "projectName": "Lifeflow",
+  "lastUpdated": "2025-03-04",
+  "overview": "Comprehensive UI/UX design system for the Lifeflow application covering all modules and components",
+  "designSystem": {
+    "colors": {
+      "primary": {
+        "name": "Primary Blue",
+        "hex": "#376B98",
+        "rgb": "rgb(55, 107, 152)",
+        "usage": "Main action buttons, active states, links, headers"
+      },
+      "secondary": {
+        "name": "Secondary Red",
+        "hex": "#FF6B6B",
+        "rgb": "rgb(255, 107, 107)",
+        "usage": "Alerts, warnings, delete actions, errors"
+      },
+      "accent": {
+        "name": "Accent Yellow",
+        "hex": "#FFC300",
+        "rgb": "rgb(255, 195, 0)",
+        "usage": "Highlights, calls to attention, premium features"
+      },
+      "neutral": {
+        "white": "#FFFFFF",
+        "lightGray": "#F3F4F6",
+        "gray": "#D1D5DB",
+        "darkGray": "#6B7280",
+        "charcoal": "#111827"
+      },
+      "semantic": {
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "info": "#3B82F6"
+      }
+    },
+    "typography": {
+      "fontFamilies": {
+        "heading": "Open Sans Bold",
+        "body": "Open Sans Regular",
+        "mono": "Monaco or Courier"
+      },
+      "scales": {
+        "h1": {
+          "fontSize": "32px",
+          "fontWeight": 700,
+          "lineHeight": "1.2",
+          "letterSpacing": "-0.02em",
+          "usage": "Page titles, main headlines"
+        },
+        "h2": {
+          "fontSize": "24px",
+          "fontWeight": 700,
+          "lineHeight": "1.3",
+          "letterSpacing": "-0.01em",
+          "usage": "Section titles, major headers"
+        },
+        "h3": {
+          "fontSize": "20px",
+          "fontWeight": 600,
+          "lineHeight": "1.4",
+          "usage": "Subsection titles"
+        },
+        "body": {
+          "fontSize": "16px",
+          "fontWeight": 400,
+          "lineHeight": "1.5",
+          "letterSpacing": "0",
+          "usage": "Body text, descriptions"
+        },
+        "small": {
+          "fontSize": "14px",
+          "fontWeight": 400,
+          "lineHeight": "1.4",
+          "usage": "Small text, captions"
+        },
+        "xs": {
+          "fontSize": "12px",
+          "fontWeight": 400,
+          "lineHeight": "1.3",
+          "usage": "Extra small text, labels"
+        }
+      }
+    },
+    "spacing": {
+      "unit": "4px",
+      "scales": {
+        "xs": "4px",
+        "sm": "8px",
+        "md": "16px",
+        "lg": "24px",
+        "xl": "32px",
+        "2xl": "48px",
+        "3xl": "64px"
+      }
+    },
+    "borderRadius": {
+      "sm": "4px",
+      "md": "8px",
+      "lg": "12px",
+      "xl": "16px",
+      "full": "9999px"
+    },
+    "shadows": {
+      "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+      "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1)"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": {
+        "name": "Primary Button",
+        "description": "Main action button used for primary interactions",
+        "style": {
+          "backgroundColor": "#376B98",
+          "textColor": "#FFFFFF",
+          "padding": "10px 16px",
+          "borderRadius": "8px",
+          "fontWeight": 600,
+          "cursor": "pointer"
+        },
+        "states": {
+          "default": {
+            "backgroundColor": "#376B98",
+            "boxShadow": "none"
+          },
+          "hover": {
+            "backgroundColor": "#2d5880",
+            "boxShadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+          },
+          "active": {
+            "backgroundColor": "#244669"
+          },
+          "disabled": {
+            "backgroundColor": "#D1D5DB",
+            "cursor": "not-allowed",
+            "opacity": 0.6
+          }
+        },
+        "usage": "Add Task, Create Goal, Login, Submit forms"
+      },
+      "secondary": {
+        "name": "Secondary Button",
+        "description": "Secondary action button with outline style",
+        "style": {
+          "backgroundColor": "transparent",
+          "borderColor": "#376B98",
+          "textColor": "#376B98",
+          "border": "1px solid #376B98",
+          "padding": "10px 16px",
+          "borderRadius": "8px",
+          "fontWeight": 600
+        },
+        "states": {
+          "default": {
+            "backgroundColor": "transparent",
+            "borderColor": "#376B98"
+          },
+          "hover": {
+            "backgroundColor": "#E8EFF5"
+          }
+        },
+        "usage": "Cancel, Secondary actions"
+      },
+      "danger": {
+        "name": "Danger Button",
+        "description": "Button for destructive actions",
+        "style": {
+          "backgroundColor": "#FF6B6B",
+          "textColor": "#FFFFFF",
+          "padding": "10px 16px",
+          "borderRadius": "8px",
+          "fontWeight": 600
+        },
+        "usage": "Delete, Logout, Destructive actions"
+      }
+    },
+    "forms": {
+      "inputField": {
+        "name": "Text Input",
+        "description": "Standard input field for text entry",
+        "style": {
+          "padding": "8px 12px",
+          "borderRadius": "8px",
+          "border": "1px solid #D1D5DB",
+          "fontSize": "16px",
+          "fontFamily": "Open Sans"
+        },
+        "states": {
+          "default": {
+            "borderColor": "#D1D5DB",
+            "backgroundColor": "#FFFFFF"
+          },
+          "focus": {
+            "borderColor": "#376B98",
+            "boxShadow": "0 0 0 3px rgba(55, 107, 152, 0.1)"
+          },
+          "error": {
+            "borderColor": "#EF4444",
+            "backgroundColor": "#FEE2E2"
+          },
+          "disabled": {
+            "backgroundColor": "#F3F4F6",
+            "borderColor": "#E5E7EB",
+            "color": "#9CA3AF"
+          }
+        }
+      },
+      "select": {
+        "name": "Dropdown/Select",
+        "description": "Select dropdown for multiple options",
+        "style": {
+          "padding": "8px 12px",
+          "borderRadius": "8px",
+          "border": "1px solid #D1D5DB",
+          "fontSize": "16px"
+        }
+      },
+      "checkbox": {
+        "name": "Checkbox",
+        "description": "Checkbox for boolean selections",
+        "style": {
+          "size": "20px",
+          "borderRadius": "4px",
+          "border": "2px solid #D1D5DB"
+        },
+        "checked": {
+          "backgroundColor": "#376B98",
+          "borderColor": "#376B98"
+        }
+      },
+      "label": {
+        "name": "Form Label",
+        "description": "Label for form fields",
+        "style": {
+          "fontSize": "14px",
+          "fontWeight": 500,
+          "color": "#374151",
+          "marginBottom": "6px"
+        }
+      }
+    },
+    "cards": {
+      "basic": {
+        "name": "Basic Card",
+        "description": "Container for grouped content",
+        "style": {
+          "backgroundColor": "#FFFFFF",
+          "borderRadius": "8px",
+          "padding": "24px",
+          "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.1)",
+          "border": "1px solid #E5E7EB"
+        }
+      },
+      "task": {
+        "name": "Task Card",
+        "description": "Card for displaying a task item",
+        "style": {
+          "backgroundColor": "#FFFFFF",
+          "borderRadius": "8px",
+          "padding": "16px",
+          "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.1)"
+        }
+      },
+      "goal": {
+        "name": "Goal Card",
+        "description": "Card for displaying goal progress",
+        "style": {
+          "backgroundColor": "#FFFFFF",
+          "borderRadius": "8px",
+          "padding": "20px",
+          "boxShadow": "0 1px 3px rgba(0, 0, 0, 0.1)"
+        }
+      }
+    },
+    "progressBar": {
+      "name": "Progress Bar",
+      "description": "Visual indicator of progress towards a goal",
+      "style": {
+        "height": "8px",
+        "borderRadius": "4px",
+        "backgroundColor": "#E5E7EB",
+        "overflow": "hidden"
+      },
+      "fill": {
+        "backgroundColor": "#376B98",
+        "transition": "width 0.3s ease-in-out"
+      }
+    },
+    "badges": {
+      "category": {
+        "name": "Category Badge",
+        "description": "Badge for task/goal categories",
+        "style": {
+          "backgroundColor": "#E8EFF5",
+          "color": "#376B98",
+          "padding": "4px 12px",
+          "borderRadius": "20px",
+          "fontSize": "12px",
+          "fontWeight": 600
+        }
+      }
+    }
+  },
+  "layouts": {
+    "pages": [
+      {
+        "name": "Login Page",
+        "path": "/login",
+        "description": "User authentication page",
+        "components": ["Logo", "Email Input", "Password Input", "Login Button", "Signup Link"],
+        "colors": ["Primary", "White", "Gray"]
+      },
+      {
+        "name": "Dashboard",
+        "path": "/dashboard",
+        "description": "Main overview page showing stats and progress",
+        "components": ["Header", "Stats Cards", "Task List", "Goal Progress", "Sidebar"],
+        "sections": ["Statistics Overview", "Recent Tasks", "Goals Progress"]
+      },
+      {
+        "name": "Tasks",
+        "path": "/tasks",
+        "description": "Task management page",
+        "components": ["Task Form", "Task List", "Category Filter", "Delete Button"],
+        "actions": ["Add Task", "Complete Task", "Delete Task", "Edit Task"]
+      },
+      {
+        "name": "Goals",
+        "path": "/goals",
+        "description": "Goal tracking page",
+        "components": ["Goal Form", "Goal Cards", "Progress Bars", "Progress Controls"],
+        "actions": ["Add Goal", "Update Progress", "Delete Goal"]
+      },
+      {
+        "name": "Calendar",
+        "path": "/calendar",
+        "description": "Calendar view of tasks and deadlines",
+        "components": ["Calendar Grid", "Task Events", "Navigation"],
+        "features": ["Month View", "Day View", "Task Details on Click"]
+      },
+      {
+        "name": "Settings",
+        "path": "/settings",
+        "description": "User preferences and account management",
+        "components": ["Account Info", "Notification Preferences", "Theme Selector"],
+        "sections": ["Account", "Notifications", "Preferences"]
+      }
+    ]
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": {
+        "width": "320px - 480px",
+        "layout": "Single column",
+        "navigation": "Mobile menu"
+      },
+      "tablet": {
+        "width": "481px - 768px",
+        "layout": "Two column with sidebar",
+        "navigation": "Mixed"
+      },
+      "desktop": {
+        "width": "769px+",
+        "layout": "Full layout with sidebar",
+        "navigation": "Top navigation"
+      }
+    }
+  },
+  "accessibility": {
+    "wcagCompliance": "WCAG 2.1 AA",
+    "guidelines": [
+      "Sufficient color contrast (minimum 4.5:1 for text)",
+      "Keyboard navigation support",
+      "ARIA labels and descriptions",
+      "Focus indicators on all interactive elements",
+      "Alt text for images"
+    ]
+  },
+  "animations": {
+    "transitions": {
+      "default": "0.3s ease-in-out",
+      "slow": "0.6s ease-in-out",
+      "fast": "0.15s ease-out"
+    },
+    "effects": [
+      {
+        "name": "Page Transition",
+        "duration": "0.3s",
+        "effect": "Fade in"
+      },
+      {
+        "name": "Progress Bar Animation",
+        "duration": "0.3s",
+        "effect": "Width change"
+      },
+      {
+        "name": "Button Hover",
+        "duration": "0.2s",
+        "effect": "Shadow and color change"
+      }
+    ]
+  }
+}

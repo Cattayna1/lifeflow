@@ -1,0 +1,329 @@
+{
+  "projectName": "Lifeflow",
+  "version": "1.0.0",
+  "description": "A comprehensive life management application for task tracking, goal setting, and personal growth",
+  "createdDate": "2025-03-04",
+  "projectType": "Full-Stack Web Application",
+  "status": "MVP Development",
+  "vision": "Empower users to take control of their lives by providing a comprehensive workflow management tool that adapts to individual needs and promotes lifelong learning",
+  "stack": {
+    "frontend": {
+      "framework": "React.js",
+      "version": "^17.0.2",
+      "language": "JavaScript/JSX",
+      "styling": "Tailwind CSS",
+      "uiLibrary": "Lucide React Icons",
+      "charts": "Recharts"
+    },
+    "backend": {
+      "runtime": "Node.js",
+      "framework": "Express.js",
+      "version": "^4.17.1",
+      "language": "JavaScript"
+    },
+    "database": {
+      "type": "MongoDB",
+      "driver": "Mongoose",
+      "version": "^5.11.15"
+    },
+    "authentication": {
+      "library": "jsonwebtoken",
+      "version": "^8.5.1",
+      "passwordHashing": "bcryptjs",
+      "passwordHashingVersion": "^2.4.3"
+    },
+    "deployment": "AWS",
+    "versionControl": "Git"
+  },
+  "features": {
+    "core": [
+      {
+        "name": "User Authentication",
+        "description": "Secure login and signup with JWT tokens",
+        "status": "MVP",
+        "implemented": true
+      },
+      {
+        "name": "Task Management",
+        "description": "Create, read, update, delete tasks with categories",
+        "status": "MVP",
+        "implemented": true,
+        "operations": ["Create", "Read", "Update (toggle completion)", "Delete"]
+      },
+      {
+        "name": "Goal Tracking",
+        "description": "Set goals, track progress with visual indicators",
+        "status": "MVP",
+        "implemented": true,
+        "operations": ["Create", "Read", "Update progress", "Delete"]
+      },
+      {
+        "name": "Dashboard",
+        "description": "Overview of tasks, goals, and progress statistics",
+        "status": "MVP",
+        "implemented": true
+      },
+      {
+        "name": "Notifications",
+        "description": "Reminders for upcoming tasks and deadlines",
+        "status": "Planned",
+        "implemented": false
+      },
+      {
+        "name": "Progress Reports",
+        "description": "Generate reports on user performance",
+        "status": "Planned",
+        "implemented": false
+      }
+    ]
+  },
+  "mvpRequirements": {
+    "functional": [
+      "Users can create, read, update, and delete personal tasks",
+      "Users can set reminders and notifications for tasks",
+      "System allows users to categorize tasks into different groups",
+      "Users can view tasks in a calendar format",
+      "Users can set goals and track their progress over time",
+      "System supports user authentication and authorization"
+    ],
+    "nonFunctional": [
+      "System is responsive and accessible on desktop and mobile",
+      "Application loads within 2 seconds for the user interface",
+      "System ensures data security and privacy for user information",
+      "User interface is intuitive and user-friendly",
+      "Application supports at least 1000 simultaneous users"
+    ]
+  },
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add a new task",
+      "story": "As a user, I want to be able to add a new task so that I can keep track of my responsibilities",
+      "status": "Completed"
+    },
+    {
+      "id": "US-002",
+      "title": "Receive task notifications",
+      "story": "As a user, I want to receive notifications for upcoming tasks so that I don't miss deadlines",
+      "status": "Planned"
+    },
+    {
+      "id": "US-003",
+      "title": "View tasks in calendar",
+      "story": "As a user, I want to view my tasks in a calendar so that I can better plan my week",
+      "status": "In Progress"
+    },
+    {
+      "id": "US-004",
+      "title": "Categorize tasks",
+      "story": "As a user, I want to categorize tasks to organize my workload effectively",
+      "status": "Completed"
+    },
+    {
+      "id": "US-005",
+      "title": "Track goal progress",
+      "story": "As a user, I want to see my progress towards goals to stay motivated",
+      "status": "Completed"
+    }
+  ],
+  "developmentRoadmap": {
+    "phase1": {
+      "name": "Requirements & Setup",
+      "duration": "1 month",
+      "tasks": [
+        "Develop project structure and set up repositories",
+        "Define UI/UX wireframes",
+        "Set up development environment"
+      ],
+      "status": "Completed"
+    },
+    "phase2": {
+      "name": "Core Feature Development",
+      "duration": "2 months",
+      "tasks": [
+        "Implement User Authentication",
+        "Develop Goal Setting and Task Management features",
+        "Build Dashboard"
+      ],
+      "status": "In Progress"
+    },
+    "phase3": {
+      "name": "Progress Tracking & Reporting",
+      "duration": "2 months",
+      "tasks": [
+        "Implement visual progress tracking",
+        "Develop reporting functionalities",
+        "Add notification system"
+      ],
+      "status": "Planned"
+    },
+    "phase4": {
+      "name": "Testing & Deployment",
+      "duration": "1 month",
+      "tasks": [
+        "Conduct unit testing",
+        "Perform integration testing",
+        "Deploy to AWS"
+      ],
+      "status": "Planned"
+    },
+    "phase5": {
+      "name": "Post-Launch Improvements",
+      "duration": "Ongoing",
+      "tasks": [
+        "Gather user feedback",
+        "Implement continuous improvements",
+        "Monitor performance"
+      ],
+      "status": "Planned"
+    }
+  },
+  "designSystem": {
+    "colors": {
+      "primary": "#376B98",
+      "secondary": "#FF6B6B",
+      "accent": "#FFC300",
+      "background": "#F3F4F6",
+      "text": "#111827",
+      "textMuted": "#6B7280",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    },
+    "typography": {
+      "headingFont": "Open Sans Bold",
+      "bodyFont": "Open Sans Regular",
+      "sizes": {
+        "h1": "32px",
+        "h2": "24px",
+        "h3": "20px",
+        "body": "16px",
+        "small": "14px",
+        "xs": "12px"
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": {
+          "style": "rounded corners, blue background, white text",
+          "states": ["default", "hover", "active", "disabled"]
+        },
+        "secondary": {
+          "style": "outline style with hover effect",
+          "states": ["default", "hover", "active", "disabled"]
+        }
+      },
+      "forms": {
+        "inputFields": "rounded corners, standard size, placeholder text"
+      }
+    }
+  },
+  "deploymentInfo": {
+    "hosting": "AWS",
+    "environment": "Production",
+    "url": "https://lifeflow.example.com",
+    "status": "Not deployed yet",
+    "requirements": [
+      "AWS Account",
+      "MongoDB Atlas or local MongoDB",
+      "Node.js environment",
+      "Environment variables (.env)"
+    ]
+  },
+  "files": {
+    "frontend": [
+      {
+        "name": "Lifeflow-MVP.jsx",
+        "type": "React Component",
+        "description": "Complete MVP React component with all features",
+        "size": "~25KB",
+        "dependencies": ["React", "Lucide React Icons", "Tailwind CSS"]
+      }
+    ],
+    "backend": [
+      {
+        "name": "package.json",
+        "type": "Backend Config",
+        "description": "Backend dependencies and scripts",
+        "dependencies": ["Express", "Mongoose", "jsonwebtoken", "bcryptjs"]
+      }
+    ],
+    "documentation": [
+      {
+        "name": "REQUIREMENTS.md",
+        "type": "Documentation",
+        "description": "Functional and non-functional requirements"
+      },
+      {
+        "name": "README.md",
+        "type": "Documentation",
+        "description": "Project overview and getting started guide"
+      },
+      {
+        "name": "PROJECT_PLAN.md",
+        "type": "Documentation",
+        "description": "Detailed project plan and roadmap"
+      },
+      {
+        "name": "DESIGN.md",
+        "type": "Documentation",
+        "description": "Design system and UI/UX specifications"
+      }
+    ]
+  },
+  "gitConfiguration": {
+    "gitignore": [
+      "node_modules/",
+      "dist/",
+      ".next/",
+      ".env",
+      ".env.local",
+      ".env.production.local",
+      ".DS_Store",
+      "npm-debug.log*",
+      "yarn-debug.log*"
+    ]
+  },
+  "team": {
+    "roles": [
+      "Frontend Developer",
+      "Backend Developer",
+      "Database Administrator",
+      "DevOps Engineer",
+      "QA Tester"
+    ]
+  },
+  "successMetrics": [
+    {
+      "metric": "Application Load Time",
+      "target": "< 2 seconds",
+      "current": "Not measured yet"
+    },
+    {
+      "metric": "User Retention",
+      "target": "> 70%",
+      "current": "Not measured yet"
+    },
+    {
+      "metric": "Task Completion Rate",
+      "target": "> 80%",
+      "current": "Not measured yet"
+    },
+    {
+      "metric": "System Uptime",
+      "target": "99.9%",
+      "current": "Not measured yet"
+    }
+  ],
+  "nextSteps": [
+    "Set up backend API server with Express.js",
+    "Create MongoDB database schema and models",
+    "Implement authentication endpoints",
+    "Build API endpoints for task and goal management",
+    "Connect frontend to backend API",
+    "Implement notification system",
+    "Set up testing suite",
+    "Deploy to AWS",
+    "Monitor and optimize performance"
+  ]
+}

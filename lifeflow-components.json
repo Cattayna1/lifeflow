@@ -1,0 +1,552 @@
+{
+  "documentType": "Components Documentation",
+  "version": "1.0.0",
+  "projectName": "Lifeflow",
+  "lastUpdated": "2025-03-04",
+  "components": [
+    {
+      "id": "comp-001",
+      "name": "LifeflowMVP",
+      "type": "Main Application Component",
+      "file": "Lifeflow-MVP.jsx",
+      "description": "Root component for the entire Lifeflow MVP application. Handles authentication, page routing, and state management.",
+      "status": "Active",
+      "dependencies": [
+        "React",
+        "lucide-react (Icons)",
+        "Tailwind CSS"
+      ],
+      "props": {
+        "none": "This is the root component with no required props"
+      },
+      "state": [
+        {
+          "name": "isLoggedIn",
+          "type": "boolean",
+          "description": "Tracks user authentication status"
+        },
+        {
+          "name": "userEmail",
+          "type": "string",
+          "description": "Stores the logged-in user's email"
+        },
+        {
+          "name": "currentPage",
+          "type": "string",
+          "description": "Tracks which page is currently displayed (dashboard, tasks, goals, settings)",
+          "options": ["dashboard", "tasks", "goals", "settings", "calendar"]
+        },
+        {
+          "name": "tasks",
+          "type": "array",
+          "description": "Array of task objects containing task data"
+        },
+        {
+          "name": "goals",
+          "type": "array",
+          "description": "Array of goal objects containing goal data"
+        }
+      ],
+      "pages": [
+        {
+          "name": "Login Page",
+          "component": "LoginForm",
+          "route": "/login",
+          "features": ["Email input", "Password input", "Login button", "Demo mode explanation"]
+        },
+        {
+          "name": "Dashboard",
+          "component": "Dashboard",
+          "route": "/dashboard",
+          "features": [
+            "Stats cards (Total Tasks, Completed Tasks, Completion Rate, Active Goals)",
+            "Recent tasks list",
+            "Goals progress overview"
+          ]
+        },
+        {
+          "name": "Tasks Page",
+          "component": "TasksPage",
+          "route": "/tasks",
+          "features": [
+            "Add task form",
+            "Task list display",
+            "Task completion toggle",
+            "Task deletion",
+            "Category filtering"
+          ]
+        },
+        {
+          "name": "Goals Page",
+          "component": "GoalsPage",
+          "route": "/goals",
+          "features": [
+            "Add goal form",
+            "Goal cards display",
+            "Progress bar visualization",
+            "Progress increment/decrement buttons",
+            "Goal deletion"
+          ]
+        },
+        {
+          "name": "Calendar Page",
+          "component": "CalendarPage",
+          "route": "/calendar",
+          "features": ["Upcoming events list", "Task sorting by date"]
+        },
+        {
+          "name": "Settings Page",
+          "component": "SettingsPage",
+          "route": "/settings",
+          "features": [
+            "Account information display",
+            "Notification preferences",
+            "Logout button"
+          ]
+        }
+      ],
+      "handlers": [
+        {
+          "name": "handleLogin",
+          "description": "Authenticates user and loads demo data",
+          "parameters": ["event"]
+        },
+        {
+          "name": "handleLogout",
+          "description": "Logs out user and clears all data",
+          "parameters": []
+        },
+        {
+          "name": "addTask",
+          "description": "Creates a new task",
+          "parameters": ["event"]
+        },
+        {
+          "name": "toggleTask",
+          "description": "Marks task as complete/incomplete",
+          "parameters": ["taskId"]
+        },
+        {
+          "name": "deleteTask",
+          "description": "Removes a task",
+          "parameters": ["taskId"]
+        },
+        {
+          "name": "addGoal",
+          "description": "Creates a new goal",
+          "parameters": ["event"]
+        },
+        {
+          "name": "updateGoalProgress",
+          "description": "Updates progress for a goal",
+          "parameters": ["goalId", "change"]
+        },
+        {
+          "name": "deleteGoal",
+          "description": "Removes a goal",
+          "parameters": ["goalId"]
+        }
+      ]
+    }
+  ],
+  "dataModels": [
+    {
+      "name": "User",
+      "description": "User account information",
+      "fields": [
+        {
+          "name": "email",
+          "type": "string",
+          "required": true,
+          "example": "user@example.com"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "example": "John Doe"
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "required": true,
+          "note": "Should be hashed in backend"
+        }
+      ]
+    },
+    {
+      "name": "Task",
+      "description": "Individual task item",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number/string",
+          "required": true,
+          "example": 1234567890
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "example": "Complete project proposal"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "example": "Prepare and submit project proposal by Friday"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "required": true,
+          "options": ["Personal", "Work", "Health", "Urgent"],
+          "example": "Work"
+        },
+        {
+          "name": "completed",
+          "type": "boolean",
+          "required": true,
+          "default": false,
+          "example": false
+        },
+        {
+          "name": "dueDate",
+          "type": "string (ISO 8601)",
+          "required": false,
+          "example": "2025-03-08"
+        },
+        {
+          "name": "dueTime",
+          "type": "string",
+          "required": false,
+          "example": "2:00 PM"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp",
+          "required": true,
+          "automatic": true
+        },
+        {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "required": true,
+          "automatic": true
+        }
+      ]
+    },
+    {
+      "name": "Goal",
+      "description": "Long-term goal with progress tracking",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number/string",
+          "required": true,
+          "example": 1234567890
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "example": "Read 12 books this year"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "example": "Complete at least one book per month"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "required": true,
+          "options": ["Personal", "Health", "Learning", "Finance"],
+          "example": "Personal"
+        },
+        {
+          "name": "target",
+          "type": "number",
+          "required": true,
+          "example": 12
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "required": true,
+          "default": 0,
+          "example": 7
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "required": false,
+          "example": "books"
+        },
+        {
+          "name": "dueDate",
+          "type": "string (ISO 8601)",
+          "required": false,
+          "example": "2025-12-31"
+        },
+        {
+          "name": "createdAt",
+          "type": "timestamp",
+          "required": true,
+          "automatic": true
+        }
+      ]
+    },
+    {
+      "name": "Notification",
+      "description": "User notification for tasks and goals",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number/string",
+          "required": true
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "taskId",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "goalId",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "required": true,
+          "example": "Task 'Complete proposal' is due in 1 hour"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "required": true,
+          "options": ["reminder", "milestone", "alert"],
+          "example": "reminder"
+        },
+        {
+          "name": "read",
+          "type": "boolean",
+          "required": true,
+          "default": false
+        },
+        {
+          "name": "sentAt",
+          "type": "timestamp",
+          "required": true,
+          "automatic": true
+        }
+      ]
+    }
+  ],
+  "apiEndpoints": [
+    {
+      "category": "Authentication",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/api/auth/signup",
+          "description": "Create new user account",
+          "requestBody": {
+            "email": "string",
+            "password": "string",
+            "name": "string"
+          },
+          "responseBody": {
+            "token": "string",
+            "user": "User object"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "description": "Authenticate user",
+          "requestBody": {
+            "email": "string",
+            "password": "string"
+          },
+          "responseBody": {
+            "token": "string",
+            "user": "User object"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/logout",
+          "description": "Logout user",
+          "authentication": "Required"
+        }
+      ]
+    },
+    {
+      "category": "Tasks",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/api/tasks",
+          "description": "Get all user tasks",
+          "authentication": "Required",
+          "responseBody": "Array of Task objects"
+        },
+        {
+          "method": "POST",
+          "path": "/api/tasks",
+          "description": "Create new task",
+          "authentication": "Required",
+          "requestBody": "Task object"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/tasks/:id",
+          "description": "Update task",
+          "authentication": "Required",
+          "requestBody": "Partial Task object"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/tasks/:id",
+          "description": "Delete task",
+          "authentication": "Required"
+        }
+      ]
+    },
+    {
+      "category": "Goals",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/api/goals",
+          "description": "Get all user goals",
+          "authentication": "Required",
+          "responseBody": "Array of Goal objects"
+        },
+        {
+          "method": "POST",
+          "path": "/api/goals",
+          "description": "Create new goal",
+          "authentication": "Required",
+          "requestBody": "Goal object"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/goals/:id",
+          "description": "Update goal",
+          "authentication": "Required",
+          "requestBody": "Partial Goal object"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/goals/:id",
+          "description": "Delete goal",
+          "authentication": "Required"
+        }
+      ]
+    }
+  ],
+  "uiComponents": [
+    {
+      "name": "Login Form",
+      "location": "Login Page",
+      "fields": ["Email input", "Password input"],
+      "buttons": ["Login button"],
+      "validation": ["Email format", "Password required"]
+    },
+    {
+      "name": "Header",
+      "location": "All pages (logged in)",
+      "elements": [
+        "Logo and app name",
+        "Navigation menu",
+        "User email display",
+        "Logout button"
+      ],
+      "responsive": "Mobile menu button on small screens"
+    },
+    {
+      "name": "Sidebar",
+      "location": "All pages (logged in)",
+      "items": [
+        "Dashboard",
+        "Tasks",
+        "Goals",
+        "Calendar",
+        "Settings"
+      ],
+      "responsive": "Hidden on mobile, accessible via menu button"
+    },
+    {
+      "name": "Stats Cards",
+      "location": "Dashboard",
+      "cards": [
+        {
+          "title": "Total Tasks",
+          "value": "Number of all tasks"
+        },
+        {
+          "title": "Completed Tasks",
+          "value": "Number of completed tasks"
+        },
+        {
+          "title": "Completion Rate",
+          "value": "Percentage of completed tasks"
+        },
+        {
+          "title": "Active Goals",
+          "value": "Number of active goals"
+        }
+      ]
+    },
+    {
+      "name": "Task List",
+      "location": "Dashboard, Tasks page",
+      "features": [
+        "Task title",
+        "Category badge",
+        "Completion checkbox",
+        "Delete button"
+      ]
+    },
+    {
+      "name": "Goal Card",
+      "location": "Dashboard, Goals page",
+      "features": [
+        "Goal title",
+        "Category label",
+        "Progress bar",
+        "Current progress / target",
+        "Increment/decrement buttons"
+      ]
+    },
+    {
+      "name": "Add Task Form",
+      "location": "Tasks page",
+      "fields": [
+        "Task title (required)",
+        "Category dropdown",
+        "Due date picker"
+      ],
+      "buttons": ["Add Task"]
+    },
+    {
+      "name": "Add Goal Form",
+      "location": "Goals page",
+      "fields": [
+        "Goal title (required)",
+        "Target number (required)",
+        "Current progress"
+      ],
+      "buttons": ["Add Goal"]
+    }
+  ]
+}
