@@ -1,0 +1,735 @@
+import { useState } from "react";
+
+// ── Icons ────────────────────────────────────────────────────────────────────
+const Icon = ({ name, size = 18, color = "currentColor" }) => {
+  const d = {
+    dashboard:"M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z",
+    tasks:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+    goals:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z",
+    calendar:"M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z",
+    settings:"M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z",
+    logout:"M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z",
+    plus:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+    trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z",
+    check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+    star:"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z",
+    bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+    user:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+    trend_up:"M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z",
+    target:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18h-2v1.93C7.06 19.48 4.52 16.94 4.07 14H6v-2H4.07C4.52 9.06 7.06 6.52 10 6.07V8h2V6.07c2.94.45 5.48 2.99 5.93 5.93H16v2h1.93c-.45 2.94-2.99 5.48-5.93 5.93z",
+    edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+    link:"M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z",
+    close:"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z",
+    expand:"M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
+    collapse:"M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z",
+  }[name];
+  return d ? <svg width={size} height={size} viewBox="0 0 24 24" fill={color}><path d={d}/></svg> : null;
+};
+
+// ── Constants & Data ─────────────────────────────────────────────────────────
+const CATEGORIES = ["Personal","Work","Health","Urgent"];
+const GOAL_CATS  = ["Personal","Health","Learning","Finance"];
+const PRIO = { high:"#EF4444", medium:"#F59E0B", low:"#10B981" };
+const CAT  = {
+  Work:    {bg:"#EFF6FF",text:"#1D4ED8"},
+  Personal:{bg:"#F5F3FF",text:"#7C3AED"},
+  Health:  {bg:"#ECFDF5",text:"#059669"},
+  Urgent:  {bg:"#FEF2F2",text:"#DC2626"},
+  Finance: {bg:"#FFFBEB",text:"#D97706"},
+  Learning:{bg:"#F0FDF4",text:"#16A34A"},
+};
+
+const INIT_TASKS = [
+  {id:1,title:"Complete project proposal",category:"Work",  completed:false,dueDate:"2026-03-08",priority:"high",  goalID:null},
+  {id:2,title:"Morning run – 5km",        category:"Health",completed:true, dueDate:"2026-03-04",priority:"medium",goalID:2},
+  {id:3,title:"Read chapter 4 of Atomic Habits",category:"Personal",completed:false,dueDate:"2026-03-06",priority:"low",goalID:1},
+  {id:4,title:"Fix production bug #2341", category:"Work",  completed:false,dueDate:"2026-03-05",priority:"high",  goalID:null},
+  {id:5,title:"Grocery shopping",         category:"Personal",completed:true,dueDate:"2026-03-04",priority:"medium",goalID:null},
+  {id:6,title:"Schedule dentist",         category:"Health",completed:false,dueDate:"2026-03-10",priority:"low",  goalID:null},
+];
+const INIT_GOALS = [
+  {id:1,title:"Read 12 books this year",   category:"Personal",target:12,   progress:3,   unit:"books",   dueDate:"2026-12-31"},
+  {id:2,title:"Run 500km total",           category:"Health",  target:500,  progress:87,  unit:"km",      dueDate:"2026-12-31"},
+  {id:3,title:"Save $10,000",             category:"Finance",  target:10000,progress:3400,unit:"dollars", dueDate:"2026-12-31"},
+  {id:4,title:"Complete 20 online courses",category:"Learning",target:20,   progress:7,   unit:"courses", dueDate:"2026-12-31"},
+];
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const fmtDay = ds => { const [y,m,d]=ds.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}); };
+const Badge = ({cat}) => { const c=CAT[cat]||CAT.Personal; return <span style={{display:"inline-flex",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:700,background:c.bg,color:c.text}}>{cat}</span>; };
+const ProgressBar = ({pct,done}) => <div style={{background:"#F3F4F6",borderRadius:99,height:8,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,borderRadius:99,background:done?"var(--success)":"var(--primary)",transition:"width 0.4s"}}/></div>;
+const Toggle = ({on,onToggle}) => <div onClick={onToggle} style={{width:44,height:24,borderRadius:99,background:on?"var(--primary)":"var(--border)",cursor:"pointer",position:"relative",transition:"background 0.2s",flexShrink:0}}><div style={{position:"absolute",top:3,left:on?23:3,width:18,height:18,background:"white",borderRadius:"50%",transition:"left 0.2s"}}/></div>;
+const Toast = ({msg}) => msg ? <div className="toast">{msg}</div> : null;
+
+// ── CSS ──────────────────────────────────────────────────────────────────────
+const CSS = `
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --primary:#376B98;--primary-dark:#2d5880;--primary-light:#E8F0F7;
+    --bg:#F4F6FA;--surface:#fff;--border:#E5E7EB;
+    --text:#111827;--muted:#6B7280;--success:#10B981;--error:#EF4444;
+    --r:12px;--sh:0 1px 3px rgba(0,0,0,.08);
+  }
+  body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
+  /* login */
+  .login-wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+  .login-brand{background:linear-gradient(135deg,#376B98,#1a3a52);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px;color:#fff;overflow:hidden}
+  .brand-logo{font-size:48px;font-weight:800;letter-spacing:-2px;margin-bottom:16px}
+  .brand-tagline{font-size:17px;opacity:.8;max-width:280px;text-align:center;line-height:1.6}
+  .brand-features{margin-top:40px;display:flex;flex-direction:column;gap:14px}
+  .brand-feature{display:flex;align-items:center;gap:12px;font-size:15px;opacity:.9}
+  .brand-dot{width:8px;height:8px;background:#FFC300;border-radius:50%;flex-shrink:0}
+  .login-form-side{display:flex;align-items:center;justify-content:center;padding:60px}
+  .login-card{width:100%;max-width:400px}
+  /* form */
+  .form-group{margin-bottom:18px}
+  .form-label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+  .form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);outline:none;transition:border-color .2s}
+  .form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(55,107,152,.1)}
+  select.form-input{cursor:pointer}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+  .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(55,107,152,.3)}
+  .btn-secondary{background:var(--primary-light);color:var(--primary)}.btn-secondary:hover{background:#d4e5f2}
+  .btn-danger{background:#FEF2F2;color:var(--error)}.btn-danger:hover{background:var(--error);color:#fff}
+  .btn-ghost{background:transparent;color:var(--muted)}.btn-ghost:hover{background:var(--bg);color:var(--text)}
+  .btn-full{width:100%}.btn-sm{padding:6px 12px;font-size:13px;border-radius:8px}.btn-icon{padding:7px}
+  /* shell */
+  .app-shell{display:flex;height:100vh;overflow:hidden}
+  .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 16px;flex-shrink:0}
+  .sidebar-logo{font-size:24px;font-weight:800;color:var(--primary);padding:0 8px 24px;letter-spacing:-1px}
+  .sidebar-logo span{color:#FFC300}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+  .nav-item:hover{background:var(--bg);color:var(--text)}.nav-item.active{background:var(--primary-light);color:var(--primary);font-weight:600}
+  .sidebar-footer{padding-top:16px;border-top:1px solid var(--border)}
+  .user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#1a3a52);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;flex-shrink:0}
+  /* main */
+  .main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+  .content{padding:28px 32px;flex:1}
+  /* cards */
+  .card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:22px;box-shadow:var(--sh)}
+  .section-title{font-size:16px;font-weight:700}
+  .section-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  /* stats */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .stat-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:18px}
+  .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+  /* tasks */
+  .task-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+  .task-item:last-child{border-bottom:none}
+  .task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;background:#fff}
+  .task-check.done{background:var(--success);border-color:var(--success)}
+  /* tabs */
+  .tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px}
+  .tab{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;font-family:inherit;color:var(--muted);transition:all .15s}
+  .tab.active{background:#fff;color:var(--primary);box-shadow:var(--sh)}
+  /* goals */
+  .goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .goal-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:18px}
+  .goal-card.completed-card{opacity:.75;border-style:dashed}
+  /* calendar */
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .cal-hdr{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:8px 0;text-transform:uppercase}
+  .cal-cell{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;position:relative;color:var(--muted)}
+  .cal-cell.in-month{color:var(--text)}.cal-cell.in-month:hover{background:var(--primary-light);color:var(--primary)}
+  .cal-cell.today{background:var(--primary);color:#fff;font-weight:700}
+  .cal-cell.selected{outline:2px solid var(--primary);outline-offset:-2px;background:var(--primary-light);color:var(--primary);font-weight:700}
+  .cal-cell.today.selected{background:var(--primary);color:#fff;outline:3px solid var(--primary-dark)}
+  .cal-cell.has-task::after{content:"";position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:#FFC300;border-radius:50%}
+  /* day panel */
+  .day-panel{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:20px;box-shadow:var(--sh)}
+  /* settings */
+  .setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+  .setting-row:last-child{border-bottom:none}
+  /* misc */
+  .empty{text-align:center;padding:40px 16px;color:var(--muted)}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .page-enter{animation:fadeSlide .22s ease forwards}
+  .toast{position:fixed;bottom:24px;right:24px;background:#1F2937;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:999;animation:fadeSlide .3s ease}
+  @media(max-width:900px){.stats-grid,.form-row{grid-template-columns:1fr 1fr}.dash-grid,.goals-grid{grid-template-columns:1fr}.login-brand{display:none}.login-wrap{grid-template-columns:1fr}}
+`;
+
+// ── Login ────────────────────────────────────────────────────────────────────
+function LoginPage({ onLogin }) {
+  const [email, setEmail] = useState("demo@lifeflow.app");
+  const [pass, setPass] = useState("password123");
+  const [isSignup, setIsSignup] = useState(false);
+  const [name, setName] = useState("");
+  return (
+    <div className="login-wrap">
+      <div className="login-brand">
+        <div className="brand-logo">Lifeflow</div>
+        <div className="brand-tagline">Your all-in-one life management system for focused, intentional living.</div>
+        <div className="brand-features">
+          {["Smart task management","Goal progress tracking","Calendar with inline creation","Personalised insights"].map(f=>(
+            <div className="brand-feature" key={f}><div className="brand-dot"/>{f}</div>
+          ))}
+        </div>
+      </div>
+      <div className="login-form-side">
+        <div className="login-card">
+          <h1 style={{fontSize:30,fontWeight:800,marginBottom:6}}>{isSignup?"Create account":"Welcome back"}</h1>
+          <p style={{color:"var(--muted)",marginBottom:36,fontSize:14}}>{isSignup?"Start your journey":"Sign in to continue"}</p>
+          {isSignup && <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" placeholder="Alex Chen" value={name} onChange={e=>setName(e.target.value)}/></div>}
+          <div className="form-group"><label className="form-label">Email</label><input className="form-input" type="email" value={email} onChange={e=>setEmail(e.target.value)}/></div>
+          <div className="form-group"><label className="form-label">Password</label><input className="form-input" type="password" value={pass} onChange={e=>setPass(e.target.value)}/></div>
+          <button className="btn btn-primary btn-full" style={{padding:13,marginTop:4}} onClick={()=>email&&pass&&onLogin(email,name||"Alex Chen")}>
+            {isSignup?"Create Account":"Sign In"}
+          </button>
+          <p style={{textAlign:"center",marginTop:18,fontSize:13,color:"var(--muted)"}}>
+            {isSignup?"Have an account? ":"New here? "}
+            <span style={{color:"var(--primary)",fontWeight:600,cursor:"pointer"}} onClick={()=>setIsSignup(!isSignup)}>{isSignup?"Sign in":"Sign up free"}</span>
+          </p>
+          <div style={{marginTop:20,padding:"10px 14px",background:"var(--primary-light)",borderRadius:10,fontSize:13,color:"var(--primary)"}}>
+            <strong>Demo:</strong> credentials are pre-filled — just click Sign In!
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Sidebar ──────────────────────────────────────────────────────────────────
+function Sidebar({ page, setPage, userName, onLogout }) {
+  const nav = [["dashboard","Dashboard","dashboard"],["tasks","Tasks","tasks"],["goals","Goals","goals"],["calendar","Calendar","calendar"],["settings","Settings","settings"]];
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-logo">Life<span>flow</span></div>
+      <nav style={{flex:1}}>
+        <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--muted)",padding:"0 12px",marginBottom:8}}>Navigation</div>
+        {nav.map(([id,label,icon])=>(
+          <button key={id} className={`nav-item ${page===id?"active":""}`} onClick={()=>setPage(id)}>
+            <Icon name={icon} size={15} color={page===id?"var(--primary)":"var(--muted)"}/>{label}
+          </button>
+        ))}
+      </nav>
+      <div className="sidebar-footer">
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px"}}>
+          <div className="user-av">{userName?.[0]||"A"}</div>
+          <div><div style={{fontSize:13,fontWeight:600}}>{userName}</div><div style={{fontSize:11,color:"var(--muted)"}}>Pro Account</div></div>
+        </div>
+        <button className="nav-item" style={{color:"var(--error)"}} onClick={onLogout}>
+          <Icon name="logout" size={15} color="var(--error)"/>Log out
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+// ── TaskRow (shared) ─────────────────────────────────────────────────────────
+function TaskRow({ task, goals=[], onToggle, onDelete, compact=false }) {
+  const linkedGoal = goals.find(g=>g.id===task.goalID);
+  return (
+    <div className="task-item">
+      <div className={`task-check ${task.completed?"done":""}`} onClick={()=>onToggle(task.id)}>
+        {task.completed && <Icon name="check" size={11} color="#fff"/>}
+      </div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontSize:14,fontWeight:500,textDecoration:task.completed?"line-through":"none",color:task.completed?"var(--muted)":"var(--text)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{task.title}</div>
+        <div style={{display:"flex",gap:6,marginTop:3,flexWrap:"wrap",alignItems:"center"}}>
+          {task.dueDate && <span style={{fontSize:11,color:"var(--muted)"}}>Due {task.dueDate}</span>}
+          {linkedGoal && !compact && <span style={{display:"inline-flex",alignItems:"center",gap:3,fontSize:11,color:"var(--primary)",background:"var(--primary-light)",padding:"1px 7px",borderRadius:10,fontWeight:600}}><Icon name="link" size={10} color="var(--primary)"/>{linkedGoal.title}</span>}
+        </div>
+      </div>
+      <div style={{width:6,height:6,borderRadius:"50%",background:PRIO[task.priority]||"var(--muted)",flexShrink:0}}/>
+      <Badge cat={task.category}/>
+      {onDelete && <button className="btn btn-danger btn-sm btn-icon" onClick={()=>onDelete(task.id)}><Icon name="trash" size={13}/></button>}
+    </div>
+  );
+}
+
+// ── Dashboard ────────────────────────────────────────────────────────────────
+// STATE SHARING: receives setTasks so checkbox updates propagate globally
+function Dashboard({ tasks, setTasks, goals }) {
+  const total=tasks.length, done=tasks.filter(t=>t.completed).length;
+  const rate=total?Math.round(done/total*100):0;
+  const toggle = id => setTasks(prev=>prev.map(t=>t.id===id?{...t,completed:!t.completed}:t));
+  const stats=[
+    {label:"Total Tasks",value:total,icon:"tasks",bg:"#EFF6FF",ic:"#1D4ED8",sub:`${done} completed`},
+    {label:"Completion",value:`${rate}%`,icon:"trend_up",bg:"#ECFDF5",ic:"#059669",sub:"This month"},
+    {label:"Active Goals",value:goals.filter(g=>g.progress<g.target).length,icon:"target",bg:"#FEF3C7",ic:"#D97706",sub:"In progress"},
+    {label:"Streak",value:"7 days",icon:"star",bg:"#FFF1F2",ic:"#E11D48",sub:"Personal best!"},
+  ];
+  return (
+    <div className="page-enter">
+      <div className="stats-grid">
+        {stats.map(s=>(
+          <div className="stat-card" key={s.label}>
+            <div className="stat-icon" style={{background:s.bg}}><Icon name={s.icon} size={19} color={s.ic}/></div>
+            <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:.5,color:"var(--muted)",marginBottom:6}}>{s.label}</div>
+            <div style={{fontSize:30,fontWeight:800,lineHeight:1}}>{s.value}</div>
+            <div style={{fontSize:12,color:"var(--muted)",marginTop:5}}>{s.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div className="dash-grid">
+        <div className="card">
+          <div className="section-hdr"><div className="section-title">Recent Tasks</div><span style={{fontSize:12,background:"var(--primary-light)",color:"var(--primary)",padding:"3px 10px",borderRadius:20,fontWeight:700}}>{total} total</span></div>
+          {tasks.slice(0,6).map(t=>(
+            <div className="task-item" key={t.id}>
+              <div className={`task-check ${t.completed?"done":""}`} onClick={()=>toggle(t.id)}>
+                {t.completed && <Icon name="check" size={11} color="#fff"/>}
+              </div>
+              <span style={{flex:1,fontSize:14,fontWeight:500,textDecoration:t.completed?"line-through":"none",color:t.completed?"var(--muted)":"var(--text)"}}>{t.title}</span>
+              <Badge cat={t.category}/>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="section-hdr"><div className="section-title">Goal Progress</div></div>
+          <div style={{display:"flex",flexDirection:"column",gap:18}}>
+            {goals.map(g=>{const pct=Math.min(100,Math.round(g.progress/g.target*100));return(
+              <div key={g.id}>
+                <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:5}}>
+                  <span style={{fontWeight:600}}>{g.title}</span><span style={{color:"var(--muted)"}}>{pct}%</span>
+                </div>
+                <ProgressBar pct={pct} done={pct>=100}/>
+                <div style={{fontSize:11,color:"var(--muted)",marginTop:3}}>{g.progress}/{g.target} {g.unit}</div>
+              </div>
+            );})}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Tasks Page ───────────────────────────────────────────────────────────────
+function TasksPage({ tasks, setTasks, goals, showToast }) {
+  const [title,setTitle]=useState(""); const [cat,setCat]=useState("Personal");
+  const [due,setDue]=useState(""); const [prio,setPrio]=useState("medium");
+  const [goalID,setGoalID]=useState(""); const [filter,setFilter]=useState("All");
+  const [showForm,setShowForm]=useState(false);
+
+  const add = () => {
+    if(!title.trim()) return;
+    setTasks(p=>[...p,{id:Date.now(),title:title.trim(),category:cat,completed:false,dueDate:due,priority:prio,goalID:goalID?Number(goalID):null}]);
+    setTitle("");setDue("");setGoalID("");setShowForm(false);showToast("✅ Task added!");
+  };
+  const toggle = id => setTasks(p=>p.map(t=>t.id===id?{...t,completed:!t.completed}:t));
+  const del    = id => {setTasks(p=>p.filter(t=>t.id!==id));showToast("🗑️ Removed");};
+
+  const cats=["All",...CATEGORIES];
+  const filtered=filter==="All"?tasks:tasks.filter(t=>t.category===filter);
+  const pending=filtered.filter(t=>!t.completed), done=filtered.filter(t=>t.completed);
+  return (
+    <div className="page-enter">
+      <div className="tabs" style={{marginBottom:20}}>
+        {cats.map(c=><button key={c} className={`tab ${filter===c?"active":""}`} onClick={()=>setFilter(c)}>{c}</button>)}
+      </div>
+      {showForm && (
+        <div className="card" style={{marginBottom:18}}>
+          <div className="section-title" style={{marginBottom:14}}>New Task</div>
+          <div className="form-group"><label className="form-label">Title</label><input className="form-input" placeholder="What needs to be done?" value={title} onChange={e=>setTitle(e.target.value)} autoFocus/></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Category</label>
+              <select className="form-input" value={cat} onChange={e=>setCat(e.target.value)}>{CATEGORIES.map(c=><option key={c}>{c}</option>)}</select></div>
+            <div className="form-group"><label className="form-label">Priority</label>
+              <select className="form-input" value={prio} onChange={e=>setPrio(e.target.value)}>{["high","medium","low"].map(p=><option key={p} value={p}>{p[0].toUpperCase()+p.slice(1)}</option>)}</select></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Due Date</label><input className="form-input" type="date" value={due} onChange={e=>setDue(e.target.value)}/></div>
+            <div className="form-group"><label className="form-label">Link to Goal</label>
+              <select className="form-input" value={goalID} onChange={e=>setGoalID(e.target.value)}>
+                <option value="">No goal</option>
+                {goals.map(g=><option key={g.id} value={g.id}>{g.title}</option>)}
+              </select></div>
+          </div>
+          <div style={{display:"flex",gap:8}}><button className="btn btn-primary" onClick={add}>Add Task</button><button className="btn btn-ghost" onClick={()=>setShowForm(false)}>Cancel</button></div>
+        </div>
+      )}
+      {!showForm && <button className="btn btn-primary" style={{marginBottom:18}} onClick={()=>setShowForm(true)}><Icon name="plus" size={15} color="#fff"/>Add Task</button>}
+      <div className="card" style={{marginBottom:14}}>
+        <div className="section-hdr"><div className="section-title">Pending <span style={{color:"var(--muted)",fontWeight:400}}>({pending.length})</span></div></div>
+        {pending.length===0 && <div className="empty"><div style={{fontSize:36}}>🎉</div><div style={{fontWeight:600,color:"var(--text)",marginTop:8}}>All caught up!</div></div>}
+        {pending.map(t=><TaskRow key={t.id} task={t} goals={goals} onToggle={toggle} onDelete={del}/>)}
+      </div>
+      {done.length>0 && <div className="card">
+        <div className="section-hdr"><div className="section-title" style={{color:"var(--muted)"}}>Completed ({done.length})</div></div>
+        {done.map(t=><TaskRow key={t.id} task={t} goals={goals} onToggle={toggle} onDelete={del}/>)}
+      </div>}
+    </div>
+  );
+}
+
+// ── Goal Card (with inline edit mode) ────────────────────────────────────────
+function GoalCard({ goal, tasks, onDelete, onUpdate, onUpdateProgress }) {
+  const [editing,setEditing]=useState(false);
+  const [f,setF]=useState({title:goal.title,category:goal.category,target:String(goal.target),unit:goal.unit,dueDate:goal.dueDate});
+  const pct=Math.min(100,Math.round(goal.progress/goal.target*100));
+  const isCompleted=goal.progress>=goal.target;
+  const linked=tasks.filter(t=>t.goalID===goal.id).length;
+  const col=CAT[goal.category]||CAT.Personal;
+
+  const save=()=>{onUpdate(goal.id,{...f,target:Number(f.target)});setEditing(false);};
+
+  if(editing) return (
+    <div className="goal-card">
+      <div style={{fontWeight:700,fontSize:14,marginBottom:14}}>✏️ Edit Goal</div>
+      <div className="form-group"><label className="form-label">Title</label><input className="form-input" value={f.title} onChange={e=>setF({...f,title:e.target.value})} autoFocus/></div>
+      <div className="form-row">
+        <div className="form-group"><label className="form-label">Category</label>
+          <select className="form-input" value={f.category} onChange={e=>setF({...f,category:e.target.value})}>{GOAL_CATS.map(c=><option key={c}>{c}</option>)}</select></div>
+        <div className="form-group"><label className="form-label">Unit</label><input className="form-input" value={f.unit} onChange={e=>setF({...f,unit:e.target.value})}/></div>
+      </div>
+      <div className="form-row">
+        <div className="form-group"><label className="form-label">Target</label><input className="form-input" type="number" value={f.target} onChange={e=>setF({...f,target:e.target.value})}/></div>
+        <div className="form-group"><label className="form-label">Due Date</label><input className="form-input" type="date" value={f.dueDate} onChange={e=>setF({...f,dueDate:e.target.value})}/></div>
+      </div>
+      <div style={{display:"flex",gap:8}}><button className="btn btn-primary btn-sm" onClick={save}>Save</button><button className="btn btn-ghost btn-sm" onClick={()=>setEditing(false)}>Cancel</button></div>
+    </div>
+  );
+
+  return (
+    <div className={`goal-card ${isCompleted?"completed-card":""}`}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+        <div style={{flex:1,minWidth:0}}>
+          <span style={{display:"inline-flex",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:700,background:col.bg,color:col.text,marginBottom:7}}>{goal.category}</span>
+          <div style={{fontWeight:700,fontSize:14,marginBottom:2}}>{goal.title}</div>
+          {goal.dueDate && <div style={{fontSize:11,color:"var(--muted)"}}>Due {goal.dueDate}</div>}
+        </div>
+        <div style={{display:"flex",gap:4",marginLeft:8}}>
+          {!isCompleted && <button className="btn btn-secondary btn-sm btn-icon" title="Edit" onClick={()=>setEditing(true)}><Icon name="edit" size={13}/></button>}
+          <button className="btn btn-danger btn-sm btn-icon" onClick={()=>onDelete(goal.id)}><Icon name="trash" size={13}/></button>
+        </div>
+      </div>
+      <ProgressBar pct={pct} done={isCompleted}/>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:10}}>
+        <div style={{fontSize:12,color:"var(--muted)"}}>
+          <strong style={{color:"var(--text)"}}>{goal.progress}</strong>/{goal.target} {goal.unit}
+          {linked>0 && <span style={{marginLeft:8,fontSize:11,color:"var(--primary)",background:"var(--primary-light)",padding:"1px 7px",borderRadius:10,fontWeight:600}}><Icon name="link" size={10} color="var(--primary)"/> {linked} task{linked>1?"s":""}</span>}
+        </div>
+        {!isCompleted ? (
+          <div style={{display:"flex",gap:4,alignItems:"center"}}>
+            <button className="btn btn-secondary btn-sm" onClick={()=>onUpdateProgress(goal.id,-1)}>−</button>
+            <span style={{fontSize:13,fontWeight:700,padding:"0 6px",color:"var(--primary)"}}>{pct}%</span>
+            <button className="btn btn-primary btn-sm" onClick={()=>onUpdateProgress(goal.id,1)}>+</button>
+          </div>
+        ) : (
+          <span style={{fontSize:13,fontWeight:700,color:"var(--success)"}}>🎉 Complete!</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Goals Page ───────────────────────────────────────────────────────────────
+function GoalsPage({ goals, setGoals, tasks, showToast }) {
+  const [title,setTitle]=useState(""); const [cat,setCat]=useState("Personal");
+  const [target,setTarget]=useState(""); const [unit,setUnit]=useState("");
+  const [due,setDue]=useState(""); const [showForm,setShowForm]=useState(false);
+  const [showCompleted,setShowCompleted]=useState(false);
+
+  const add=()=>{
+    if(!title.trim()||!target) return;
+    setGoals(p=>[...p,{id:Date.now(),title:title.trim(),category:cat,target:Number(target),progress:0,unit,dueDate:due}]);
+    setTitle("");setTarget("");setUnit("");setShowForm(false);showToast("🎯 Goal created!");
+  };
+  const del=id=>{setGoals(p=>p.filter(g=>g.id!==id));showToast("🗑️ Goal removed");};
+  const update=(id,data)=>{setGoals(p=>p.map(g=>g.id===id?{...g,...data}:g));showToast("✏️ Goal updated!");};
+  const updateProg=(id,delta)=>setGoals(p=>p.map(g=>g.id!==id?g:{...g,progress:Math.max(0,Math.min(g.target,g.progress+delta))}));
+
+  const active=goals.filter(g=>g.progress<g.target);
+  const completed=goals.filter(g=>g.progress>=g.target);
+
+  return (
+    <div className="page-enter">
+      {showForm && (
+        <div className="card" style={{marginBottom:18}}>
+          <div className="section-title" style={{marginBottom:14}}>New Goal</div>
+          <div className="form-group"><label className="form-label">Title</label><input className="form-input" placeholder="What do you want to achieve?" value={title} onChange={e=>setTitle(e.target.value)} autoFocus/></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Category</label>
+              <select className="form-input" value={cat} onChange={e=>setCat(e.target.value)}>{GOAL_CATS.map(c=><option key={c}>{c}</option>)}</select></div>
+            <div className="form-group"><label className="form-label">Unit</label><input className="form-input" placeholder="books, km…" value={unit} onChange={e=>setUnit(e.target.value)}/></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Target</label><input className="form-input" type="number" placeholder="12" value={target} onChange={e=>setTarget(e.target.value)}/></div>
+            <div className="form-group"><label className="form-label">Due Date</label><input className="form-input" type="date" value={due} onChange={e=>setDue(e.target.value)}/></div>
+          </div>
+          <div style={{display:"flex",gap:8}}><button className="btn btn-primary" onClick={add}>Create Goal</button><button className="btn btn-ghost" onClick={()=>setShowForm(false)}>Cancel</button></div>
+        </div>
+      )}
+      {!showForm && <button className="btn btn-primary" style={{marginBottom:18}} onClick={()=>setShowForm(true)}><Icon name="plus" size={15} color="#fff"/>New Goal</button>}
+
+      {/* Active goals */}
+      <div style={{marginBottom:6}}><span style={{fontSize:13,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:.5}}>In Progress — {active.length}</span></div>
+      {active.length===0 && !showForm && <div className="card" style={{marginBottom:16}}><div className="empty"><div style={{fontSize:36}}>🎯</div><div style={{fontWeight:600,color:"var(--text)",marginTop:8}}>No active goals</div></div></div>}
+      <div className="goals-grid" style={{marginBottom:24}}>
+        {active.map(g=><GoalCard key={g.id} goal={g} tasks={tasks} onDelete={del} onUpdate={update} onUpdateProgress={updateProg}/>)}
+      </div>
+
+      {/* Completed goals section */}
+      {completed.length>0 && (
+        <div>
+          <button className="btn btn-ghost" style={{marginBottom:12,gap:6,padding:"6px 0"}} onClick={()=>setShowCompleted(!showCompleted)}>
+            <Icon name={showCompleted?"collapse":"expand"} size={16} color="var(--muted)"/>
+            <span style={{fontSize:13,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:.5}}>Completed — {completed.length}</span>
+          </button>
+          {showCompleted && <div className="goals-grid">
+            {completed.map(g=><GoalCard key={g.id} goal={g} tasks={tasks} onDelete={del} onUpdate={update} onUpdateProgress={updateProg}/>)}
+          </div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Calendar Page ─────────────────────────────────────────────────────────────
+function CalendarPage({ tasks, setTasks, goals, showToast }) {
+  const today = new Date();
+  const [viewDate, setViewDate] = useState(new Date(today.getFullYear(),today.getMonth(),1));
+  const [selectedDay, setSelectedDay] = useState(null); // "YYYY-MM-DD"
+  const [showAdd, setShowAdd] = useState(false);
+  // Create-task-from-calendar form state
+  const [cTitle,setCTitle]=useState(""); const [cCat,setCCat]=useState("Personal");
+  const [cPrio,setCPrio]=useState("medium"); const [cGoalID,setCGoalID]=useState("");
+
+  const yr=viewDate.getFullYear(), mo=viewDate.getMonth();
+  const firstDay=new Date(yr,mo,1).getDay(), daysInMo=new Date(yr,mo+1,0).getDate();
+  const monthName=viewDate.toLocaleString("default",{month:"long",year:"numeric"});
+
+  // CONDITIONAL RENDERING: filter out status==='done' (completed) tasks from calendar display
+  const calTasks = tasks.filter(t => !t.completed);
+  const taskDateSet = new Set(calTasks.filter(t=>t.dueDate).map(t=>t.dueDate));
+
+  const dayTasks = selectedDay ? calTasks.filter(t=>t.dueDate===selectedDay) : [];
+  const upcoming = calTasks.filter(t=>t.dueDate).sort((a,b)=>a.dueDate.localeCompare(b.dueDate)).slice(0,7);
+
+  const cells = [];
+  for(let i=0;i<firstDay;i++) cells.push(null);
+  for(let d=1;d<=daysInMo;d++) cells.push(d);
+
+  const toDateStr = d => `${yr}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+  const isToday = d => today.getDate()===d && today.getMonth()===mo && today.getFullYear()===yr;
+
+  const handleDayClick = d => {
+    const ds=toDateStr(d);
+    if(selectedDay===ds){setSelectedDay(null);setShowAdd(false);}
+    else{setSelectedDay(ds);setShowAdd(false);setCTitle("");}
+  };
+
+  const addFromCal = () => {
+    if(!cTitle.trim()||!selectedDay) return;
+    setTasks(p=>[...p,{id:Date.now(),title:cTitle.trim(),category:cCat,completed:false,dueDate:selectedDay,priority:cPrio,goalID:cGoalID?Number(cGoalID):null}]);
+    setCTitle("");setCGoalID("");setShowAdd(false);showToast("✅ Task added to calendar!");
+  };
+
+  const toggleTask = id => setTasks(p=>p.map(t=>t.id===id?{...t,completed:!t.completed}:t));
+
+  return (
+    <div className="page-enter">
+      <div className="dash-grid">
+        {/* Left: Calendar grid */}
+        <div className="card">
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
+            <div className="section-title">{monthName}</div>
+            <div style={{display:"flex",gap:6}}>
+              <button className="btn btn-ghost btn-sm btn-icon" onClick={()=>setViewDate(new Date(yr,mo-1,1))}>‹</button>
+              <button className="btn btn-ghost btn-sm btn-icon" onClick={()=>setViewDate(new Date(yr,mo+1,1))}>›</button>
+            </div>
+          </div>
+          <div className="cal-grid">
+            {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=><div className="cal-hdr" key={d}>{d}</div>)}
+            {cells.map((d,i)=>{
+              if(!d) return <div key={`e${i}`}/>;
+              const ds=toDateStr(d);
+              const sel=selectedDay===ds, tod=isToday(d), hasT=taskDateSet.has(ds);
+              return (
+                <div key={d}
+                  className={`cal-cell in-month ${tod?"today":""} ${sel?"selected":""} ${hasT?"has-task":""}`}
+                  onClick={()=>handleDayClick(d)}
+                  title={hasT?"Has tasks":""}
+                >{d}</div>
+              );
+            })}
+          </div>
+          {selectedDay && (
+            <div style={{marginTop:16,paddingTop:16,borderTop:"1px solid var(--border)"}}>
+              <div style={{fontSize:12,color:"var(--muted)",fontWeight:600,marginBottom:8}}>
+                Tasks hidden from calendar: {tasks.filter(t=>t.completed&&t.dueDate===selectedDay).length} completed
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right: Day panel or upcoming */}
+        {selectedDay ? (
+          <div className="day-panel">
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
+              <div>
+                <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",color:"var(--muted)",letterSpacing:.5,marginBottom:2}}>Selected Day</div>
+                <div style={{fontWeight:700,fontSize:15}}>{fmtDay(selectedDay)}</div>
+              </div>
+              <button className="btn btn-ghost btn-sm btn-icon" onClick={()=>{setSelectedDay(null);setShowAdd(false);}}><Icon name="close" size={15}/></button>
+            </div>
+
+            {/* Tasks for this day (completed excluded) */}
+            <div style={{marginBottom:14}}>
+              {dayTasks.length===0
+                ? <div style={{fontSize:13,color:"var(--muted)",padding:"12px 0",textAlign:"center"}}>No active tasks this day</div>
+                : dayTasks.map(t=>(
+                  <div className="task-item" key={t.id} style={{padding:"9px 0"}}>
+                    <div className={`task-check ${t.completed?"done":""}`} onClick={()=>toggleTask(t.id)}>
+                      {t.completed && <Icon name="check" size={11} color="#fff"/>}
+                    </div>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:13,fontWeight:500}}>{t.title}</div>
+                      {t.goalID && <div style={{fontSize:11,color:"var(--primary)",marginTop:2}}><Icon name="link" size={9} color="var(--primary)"/> {goals.find(g=>g.id===t.goalID)?.title}</div>}
+                    </div>
+                    <Badge cat={t.category}/>
+                  </div>
+                ))
+              }
+            </div>
+
+            {/* Inline create form */}
+            {showAdd ? (
+              <div style={{borderTop:"1px solid var(--border)",paddingTop:14}}>
+                <div style={{fontSize:13,fontWeight:700,marginBottom:10}}>Add Task for this day</div>
+                <div className="form-group"><label className="form-label">Title</label><input className="form-input" placeholder="Task title…" value={cTitle} onChange={e=>setCTitle(e.target.value)} autoFocus style={{fontSize:13,padding:"9px 12px"}}/></div>
+                <div className="form-row">
+                  <div className="form-group"><label className="form-label">Category</label>
+                    <select className="form-input" value={cCat} onChange={e=>setCCat(e.target.value)} style={{fontSize:13,padding:"9px 12px"}}>
+                      {CATEGORIES.map(c=><option key={c}>{c}</option>)}
+                    </select></div>
+                  <div className="form-group"><label className="form-label">Priority</label>
+                    <select className="form-input" value={cPrio} onChange={e=>setCPrio(e.target.value)} style={{fontSize:13,padding:"9px 12px"}}>
+                      {["high","medium","low"].map(p=><option key={p} value={p}>{p[0].toUpperCase()+p.slice(1)}</option>)}
+                    </select></div>
+                </div>
+                <div className="form-group"><label className="form-label">Link to Goal</label>
+                  <select className="form-input" value={cGoalID} onChange={e=>setCGoalID(e.target.value)} style={{fontSize:13,padding:"9px 12px"}}>
+                    <option value="">No goal</option>
+                    {goals.map(g=><option key={g.id} value={g.id}>{g.title}</option>)}
+                  </select></div>
+                <div style={{display:"flex",gap:8}}><button className="btn btn-primary btn-sm" onClick={addFromCal}>Add</button><button className="btn btn-ghost btn-sm" onClick={()=>setShowAdd(false)}>Cancel</button></div>
+              </div>
+            ) : (
+              <button className="btn btn-secondary btn-sm" style={{width:"100%"}} onClick={()=>setShowAdd(true)}>
+                <Icon name="plus" size={14} color="var(--primary)"/>Add Task for {selectedDay}
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="card">
+            <div className="section-hdr"><div className="section-title">Upcoming Tasks</div><span style={{fontSize:11,color:"var(--muted)"}}>active only</span></div>
+            {upcoming.length===0 && <div className="empty"><div style={{fontSize:32}}>📅</div><div style={{fontWeight:600,color:"var(--text)",marginTop:8}}>No upcoming tasks</div></div>}
+            {upcoming.map(t=>(
+              <div className="task-item" key={t.id}>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:14,fontWeight:500}}>{t.title}</div>
+                  <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{t.dueDate}</div>
+                </div>
+                <Badge cat={t.category}/>
+              </div>
+            ))}
+            <div style={{marginTop:16,padding:"10px 14px",background:"var(--bg)",borderRadius:10,fontSize:12,color:"var(--muted)",textAlign:"center"}}>
+              <Icon name="calendar" size={13} color="var(--muted)"/> Click any day to view & add tasks
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+function SettingsPage({ userName, userEmail, onLogout }) {
+  const [notifs,setNotifs]=useState({email:true,push:false,reminders:true,weekly:true});
+  return (
+    <div className="page-enter">
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
+        <div className="card">
+          <div className="section-title" style={{marginBottom:18}}>Account</div>
+          <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20,padding:14,background:"var(--bg)",borderRadius:10}}>
+            <div className="user-av" style={{width:50,height:50,fontSize:18}}>{userName?.[0]||"A"}</div>
+            <div><div style={{fontWeight:700,fontSize:15}}>{userName}</div><div style={{color:"var(--muted)",fontSize:13}}>{userEmail}</div></div>
+          </div>
+          {[["Display Name",userName],["Email",userEmail],["Password","Last changed 30 days ago"]].map(([l,v])=>(
+            <div className="setting-row" key={l}>
+              <div><div style={{fontWeight:600,fontSize:14}}>{l}</div><div style={{fontSize:13,color:"var(--muted)"}}>{v}</div></div>
+              <button className="btn btn-secondary btn-sm">Edit</button>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="section-title" style={{marginBottom:18}}>Notifications</div>
+          {[["email","Email Notifications","Receive updates via email"],["push","Push Notifications","Browser push alerts"],["reminders","Task Reminders","Reminders before due dates"],["weekly","Weekly Summary","Weekly progress digest"]].map(([k,l,d])=>(
+            <div className="setting-row" key={k}>
+              <div><div style={{fontWeight:600,fontSize:14}}>{l}</div><div style={{fontSize:13,color:"var(--muted)"}}>{d}</div></div>
+              <Toggle on={notifs[k]} onToggle={()=>setNotifs(p=>({...p,[k]:!p[k]}))}/>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <div className="section-title" style={{marginBottom:18}}>Danger Zone</div>
+          <div className="setting-row">
+            <div><div style={{fontWeight:600,fontSize:14}}>Sign Out</div><div style={{fontSize:13,color:"var(--muted)"}}>Log out of your account</div></div>
+            <button className="btn btn-danger btn-sm" onClick={onLogout}>Log Out</button>
+          </div>
+          <div className="setting-row">
+            <div><div style={{fontWeight:600,fontSize:14,color:"var(--error)"}}>Delete Account</div><div style={{fontSize:13,color:"var(--muted)"}}>Permanently remove all data</div></div>
+            <button className="btn btn-danger btn-sm">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App Root ─────────────────────────────────────────────────────────────────
+export default function App() {
+  const [loggedIn,setLoggedIn]=useState(false);
+  const [userName,setUserName]=useState(""); const [userEmail,setUserEmail]=useState("");
+  const [page,setPage]=useState("dashboard");
+  const [tasks,setTasks]=useState(INIT_TASKS);
+  const [goals,setGoals]=useState(INIT_GOALS);
+  const [toast,setToast]=useState("");
+
+  const showToast=msg=>{setToast(msg);setTimeout(()=>setToast(""),2500);};
+  const logout=()=>{setLoggedIn(false);setPage("dashboard");};
+
+  const cfg={
+    dashboard:{title:"Dashboard",   sub:`Good ${new Date().getHours()<12?"morning":"afternoon"}, ${userName}!`},
+    tasks:    {title:"Tasks",        sub:`${tasks.filter(t=>!t.completed).length} pending · ${tasks.filter(t=>t.completed).length} done`},
+    goals:    {title:"Goals",        sub:`${goals.filter(g=>g.progress<g.target).length} active · ${goals.filter(g=>g.progress>=g.target).length} completed`},
+    calendar: {title:"Calendar",     sub:"Active tasks only — click a day to add"},
+    settings: {title:"Settings",     sub:"Manage your account and preferences"},
+  };
+
+  if(!loggedIn) return <><style>{CSS}</style><LoginPage onLogin={(e,n)=>{setUserEmail(e);setUserName(n);setLoggedIn(true);}}/></>;
+
+  const {title,sub}=cfg[page]||cfg.dashboard;
+  return (
+    <>
+      <style>{CSS}</style>
+      <div className="app-shell">
+        <Sidebar page={page} setPage={setPage} userName={userName} onLogout={logout}/>
+        <div className="main">
+          <div className="topbar">
+            <div>
+              <div style={{fontSize:21,fontWeight:800}}>{title}</div>
+              <div style={{fontSize:13,color:"var(--muted)",marginTop:1}}>{sub}</div>
+            </div>
+            <div style={{display:"flex",gap:7}}>
+              <button className="btn btn-ghost btn-icon"><Icon name="bell" size={17} color="var(--muted)"/></button>
+              <button className="btn btn-ghost btn-icon"><Icon name="user" size={17} color="var(--muted)"/></button>
+            </div>
+          </div>
+          <div className="content">
+            {page==="dashboard" && <Dashboard tasks={tasks} setTasks={setTasks} goals={goals}/>}
+            {page==="tasks"     && <TasksPage tasks={tasks} setTasks={setTasks} goals={goals} showToast={showToast}/>}
+            {page==="goals"     && <GoalsPage goals={goals} setGoals={setGoals} tasks={tasks} showToast={showToast}/>}
+            {page==="calendar"  && <CalendarPage tasks={tasks} setTasks={setTasks} goals={goals} showToast={showToast}/>}
+            {page==="settings"  && <SettingsPage userName={userName} userEmail={userEmail} onLogout={logout}/>}
+          </div>
+        </div>
+      </div>
+      <Toast msg={toast}/>
+    </>
+  );
+}
